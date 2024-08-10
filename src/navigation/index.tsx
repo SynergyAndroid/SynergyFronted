@@ -9,7 +9,8 @@ import NewPost from '../screens/NewPost';
 import BottomBar from '../components/bottom';
 import Community from '../screens/Community';
 import Profile from '../screens/Profile';
-import Chats from '../screens/Chat';
+import Chat from '../screens/Chat';
+import ChatList from '../screens/ChatList';
 
 const Stack = createNativeStackNavigator();
 
@@ -17,15 +18,16 @@ function MainStack() {
   return (
     <>
       <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
-        <Stack.Screen name="SignUp" component={SignUp} options={{ headerShown: false }} />
-        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-        <Stack.Screen name="NewPost" component={NewPost} />
-        <Stack.Screen name="Community" component={Community} />
-        <Stack.Screen name="Profile" component={Profile} />
-        <Stack.Screen name="Chats" component={Chats} />
+        <Stack.Screen name="홈" component={Home} options={{ headerShown: false }} />
+        <Stack.Screen name="회원가입" component={SignUp} options={{ headerShown: false }} />
+        <Stack.Screen name="로그인" component={Login} options={{ headerShown: false }} />
+        <Stack.Screen name="새로운 글 작성" component={NewPost} />
+        <Stack.Screen name="커뮤니티" component={Community} />
+        <Stack.Screen name="프로필" component={Profile} />
+        <Stack.Screen name="채팅" component={Chat} />
+        <Stack.Screen name="채팅목록" component={ChatList} />
       </Stack.Navigator>
-      <BottomBar />
+      <BottomBar />  
     </>
   );
 }

@@ -8,11 +8,11 @@ const BottomBar = () => {
   const navigation = useNavigation();
 
   const tabs = [
-    { name: '홈', icon: 'home', screen: 'Home' },
-    { name: '커뮤니티', icon: 'team', screen: 'Community' },
-    { name: '글 작성', icon: 'pluscircleo', screen: 'NewPost' },
-    { name: '채팅', icon: 'mail', screen: 'Chats' },
-    { name: '프로필', icon: 'user', screen: 'Profile' },
+    { name: '홈', icon: 'home', screen: '홈' },
+    { name: '커뮤니티', icon: 'team', screen: '커뮤니티' },
+    { name: '글 작성', icon: 'pluscircleo', screen: '새로운 글 작성' },
+    { name: '채팅', icon: 'mail', screen: '채팅목록' },
+    { name: '프로필', icon: 'user', screen: '프로필' },
   ];
 
   return (
@@ -21,8 +21,8 @@ const BottomBar = () => {
         <TouchableOpacity
           key={tab.name}
           onPress={() => {
-            setSelectedTab(tab.name);
-            navigation.navigate(tab.screen);
+            setSelectedTab(tab.name); // 사용자가 선택한 탭의 이름을 selectedTab 상태에 저장
+            navigation.navigate(tab.screen); 
           }}
           style={styles.tabItem}
         >

@@ -1,14 +1,14 @@
 import React from "react";
 import { View,Text } from "react-native";
 
-const Chats =() => {
+const Chat =() => {
     return (
         <View>
             <Text>
-                채팅목록
+                1대 1 채팅방이얌 
             </Text>
         </View>
     )
 }
 
-export default Chats
+export default Chat
