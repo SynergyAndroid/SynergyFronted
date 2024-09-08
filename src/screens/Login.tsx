@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import * as KakaoLogin from '@react-native-seoul/kakao-login';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
 const Login: React.FC = () => {
   const navigation = useNavigation();
@@ -15,8 +16,17 @@ const Login: React.FC = () => {
       
           const profile = await KakaoLogin.getProfile();
           console.log('GetProfile Success', JSON.stringify(profile));
-       
-  
+
+          // 백엔드로 accessToken 전송 (axios 사용)
+          const accessToken = result.accessToken;
+          await axios.post('http://172.30.1.48:9090/kakao-login', {
+            accessToken: accessToken,
+          }, {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+
           navigation.navigate('홈');
         } catch (error) {
           console.error('Login Failed', error);
