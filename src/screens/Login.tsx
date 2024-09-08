@@ -19,7 +19,7 @@ const Login: React.FC = () => {
 
           // 백엔드로 accessToken 전송 (axios 사용)
           const accessToken = result.accessToken;
-          await axios.post('http://172.30.1.48:9090/kakao-login', {
+          await axios.post('http://172.30.1.48:9090/login', {
             accessToken: accessToken,
           }, {
             headers: {
