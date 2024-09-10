@@ -83,7 +83,7 @@ const Home = () => {
                                 />
 
                         </TouchableOpacity>
-                            <Image source={require('../components/assets/images/LoveG.png')} style={styles.mapImage} />
+                            
                             <View style={styles.greetingContainer}>
                                 <Text style={styles.greetingText}>안녕하세요 혜원님!</Text>
                                 <Text style={styles.subGreetingText}>우리 오늘은 어디로 떠나볼까요?</Text>
@@ -158,20 +158,24 @@ const styles = StyleSheet.create({
     },
     greetingContainer: {
         flex: 1,
+        paddingLeft:10,
+        paddingVertical:10,
     },
     greetingText: {
-        fontSize: 18,
+        fontSize: 17,
         fontWeight: 'bold',
+        paddingLeft:10,
         color: '#000',
     },
     subGreetingText: {
         fontSize: 14,
         color: '#7D7D7D',
         marginTop: 5,
+        paddingLeft:10,
     },
     buttonContainer: {
-        paddingHorizontal:15,
-        paddingVertical:5,
+        paddingHorizontal:10,
+        paddingVertical:10,
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: 20,
@@ -208,12 +212,13 @@ const styles = StyleSheet.create({
         margin: 10, 
         backgroundColor: "white",
         borderRadius: 10,
+        borderColor:"black",
         overflow: "hidden",
-        elevation: 2, 
-        shadowColor: "black", 
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.3,
-        shadowRadius: 5,
+        //elevation: 2, 
+        //shadowColor: "black", 
+        //shadowOffset: { width: 0, height: 2 },
+        ///shadowOpacity: 0.3,
+        //shadowRadius: 5,
     },
     image: {
         width: "100%",

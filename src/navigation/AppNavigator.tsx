@@ -26,12 +26,12 @@ function AppNavigator() {
       <Stack.Navigator initialRouteName="온보딩화면">
         <Stack.Screen name="온보딩화면" component={OnboardingScreen} options={{headerShown:false}} />
         <Stack.Screen name="홈" component={Home} options={{ headerShown: false }} />
-        <Stack.Screen name="새로운 글 작성" component={NewPost} />
-        <Stack.Screen name="커뮤니티" component={Community} />
-        <Stack.Screen name="상세글 보기" component={PostDetail} />
+        <Stack.Screen name="새로운 글 작성" component={NewPost} options={{headerShown:false}} />
+        <Stack.Screen name="커뮤니티" component={Community} options={{headerShown:false}} />
+        <Stack.Screen name="상세글 보기" component={PostDetail}  />
         <Stack.Screen name="프로필" component={Profile} />
-        <Stack.Screen name="채팅" component={Chat} />
-        <Stack.Screen name="채팅목록" component={ChatList} />
+        <Stack.Screen name="채팅" component={Chat} options={{headerShown:false}}/>
+        <Stack.Screen name="채팅목록" component={ChatList}  options={{headerShown:false}}/>
         <Stack.Screen name="UserInfo" component={UserInfo} options={{ headerShown: false }} />
         <Stack.Screen name="SignUpComplete" component={SignUpComplete} options={{ headerShown: false }} />
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />

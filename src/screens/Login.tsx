@@ -10,26 +10,33 @@ const Login: React.FC = () => {
   useEffect(() => {
     const handleKakaoLogin = async () => {
         try {
-          const scopes = ['account_email', 'profile_nickname', 'profile_image'];
+          // 카카오 로그인 요청 (인증 코드 받음)
+          const scopes = ['profile_nickname', 'profile_image'];
+          console.log("Kakao login initiated");
           const result = await KakaoLogin.login({ scopes });
-          console.log('Login Success', JSON.stringify(result));
-      
-          const profile = await KakaoLogin.getProfile();
-          console.log('GetProfile Success', JSON.stringify(profile));
-
-          // 백엔드로 accessToken 전송 (axios 사용)
-          const accessToken = result.accessToken;
-          await axios.post('http://172.30.1.48:9090/login', {
-            accessToken: accessToken,
+          
+          console.log('Login Success:', JSON.stringify(result));
+          
+          // 카카오에서 받은 인가 코드를 확인
+          const authorizationCode = result.code;  // 인증 코드
+          console.log('Authorization Code:', authorizationCode);
+          
+          // 인증 코드를 백엔드로 POST 요청
+          console.log('인증코드요청');
+          const response = await axios.post('https://localhost:9090/oauth/kakao/callback', {
+            code: authorizationCode,
           }, {
             headers: {
               'Content-Type': 'application/json',
             },
           });
 
+          console.log('Response from backend:', response.data);
+
+          // 로그인 성공 후 홈으로 이동
           navigation.navigate('홈');
         } catch (error) {
-          console.error('Login Failed', error);
+          console.error('Login Failed:', error);
         }
       };
       

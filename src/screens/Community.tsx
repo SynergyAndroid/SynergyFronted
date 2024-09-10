@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-nati
 import Icon from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import BottomBar from '../components/bottom';
 
 interface Post {
@@ -91,6 +92,13 @@ const Community: React.FC = () => {
 
   return (
     <View style={styles.firstContainer}>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Ionicons
+          name="arrow-back"
+          size={25}
+          color="black"
+        />
+      </TouchableOpacity>
       <ScrollView style={styles.container}>
 
         {posts.length > 0 ? posts.map(renderPost) : <Text>No posts available.</Text>}
@@ -107,9 +115,15 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    padding: 10,
+    padding:40,
     backgroundColor: '#fff',
   },
+  backButton: {
+    position: 'absolute',
+    top: 10,
+    left: 10,
+    zIndex: 1,
+},
   pageTitle: {
     fontSize: 24,
     fontWeight: 'bold',

@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import { useNavigation } from '@react-navigation/native';
 import 'react-native-gesture-handler';
 import { SwipeListView } from 'react-native-swipe-list-view';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // 가상의 채팅 데이터
 const initialChatData = [
@@ -43,7 +44,6 @@ const ChatList = () => {
   );
 
   // 3. 삭제하기 렌더링하기 
-
   const renderHiddenItem = (data, rowMap) => (
     <View style={styles.rowBack}>
       <TouchableOpacity
@@ -66,6 +66,13 @@ const ChatList = () => {
 
   return (
     <View style={styles.container}>
+      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+        <Ionicons
+          name="arrow-back"
+          size={25}
+          color="black"
+        />
+      </TouchableOpacity>
       <SwipeListView
         data={chatData}
         renderItem={renderChatItem}
@@ -73,6 +80,7 @@ const ChatList = () => {
         rightOpenValue={-75}  // 스와이프하여 드러날 뷰의 너비 설정
         keyExtractor={item => item.id}
         disableRightSwipe  // 오른쪽으로 스와이프 방지
+        contentContainerStyle={styles.listContent}
       />
     </View>
   );
@@ -85,6 +93,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
+  backButton: {
+    position: 'absolute',
+    top: 10,
+    left: 10,
+    zIndex: 1,
+    padding: 10,
+  },
+  listContent: {
+    paddingTop: 60, 
+  },
   chatItem: {
     flexDirection: 'row',
     padding: 16,
@@ -92,6 +110,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#eee',
     alignItems: 'center',
     backgroundColor: '#fff',
+    height: 80,  
   },
   chatInfo: {
     flex: 1,

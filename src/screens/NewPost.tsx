@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { View, TextInput, Button, StyleSheet, Alert, Text } from "react-native";
+import { View, TextInput, Button, StyleSheet, Alert, Text, TouchableOpacity } from "react-native";
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
-
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const NewPost = () => {
     const [title, setTitle] = useState('');
@@ -59,6 +59,13 @@ const NewPost = () => {
 
     return (
         <View style={styles.container}>
+            <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
+                <Ionicons
+                    name="arrow-back"
+                    size={25}
+                    color="black"
+                />
+            </TouchableOpacity>
             <Text style={styles.label}>제목</Text>
             <TextInput
                 style={styles.input}
@@ -85,11 +92,19 @@ const NewPost = () => {
 const styles = StyleSheet.create({
     container: {
         padding: 20,
+        paddingTop: 60,
+    },
+    backButton: {
+        position: 'absolute',
+        top: 10,
+        left: 10,
+        zIndex: 1,
     },
     label: {
         fontSize: 16,
         fontWeight: 'bold',
         marginBottom: 5,
+        marginTop: 50, 
     },
     input: {
         borderWidth: 1,
