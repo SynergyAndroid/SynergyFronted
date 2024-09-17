@@ -45,7 +45,7 @@ const OnboardingScreen: React.FC = () => {
   };
 
   const handleLoginPress = () => {
-    navigation.navigate("Login");
+    navigation.navigate("로그인");
   };
 
   // 홈버튼으로 일단 넘어가게 하려고 만든거임...
@@ -54,12 +54,12 @@ const OnboardingScreen: React.FC = () => {
   const handleHomePress =() => {
     navigation.navigate("홈");
   };
-
-  /*
+  
+  
   const handleSignUpPress = () => {
-    navigation.navigate('TermsAgreement');
+    navigation.navigate('SignScreen');
   };
-  */
+
 
   return (
     <View style={styles.container}>
@@ -93,9 +93,18 @@ const OnboardingScreen: React.FC = () => {
           style={styles.kakaoSymbol}
         />
       </TouchableOpacity>
+      <TouchableOpacity style={styles.loginEmailButton} onPress={handleLoginPress}>
+        <Text style={styles.loginText}>
+          이메일로 로그인하기 
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.SignupButton} onPress={handleSignUpPress}>
+        <Text>회원가입하기</Text>
+      </TouchableOpacity>
       <TouchableOpacity  onPress={handleHomePress}>
         <Text>홈버튼</Text>
       </TouchableOpacity>
+      
     </View>
   );
 };
@@ -153,14 +162,35 @@ const styles = StyleSheet.create({
   activeIndicator: {
     backgroundColor: 'black',
   },
+  SignupButton:{
+    alignItems:"center",
+    
+
+  },
   loginButton: {
     backgroundColor: '#FEE500',
-    padding: 5,
+    padding: 2,
     alignItems: 'center',
     marginHorizontal: 40,
-    marginBottom: 30,
-    borderRadius: 12,
+    marginTop:30,
+    marginBottom: 10,
+    borderRadius: 15,
   },
+  loginEmailButton :{
+    backgroundColor:"black",
+    padding:15,
+    alignItems: "center",
+    marginHorizontal:40,
+    borderRadius: 15,
+    marginBottom:20,
+
+  },
+  loginText:{
+    color:"white",
+    fontWeight:'bold',
+
+  },
+  
   kakaoSymbol: {
     width: "100%",  
     height: undefined, 

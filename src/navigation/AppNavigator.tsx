@@ -15,6 +15,9 @@ import SignUpComplete from '../screens/SignUp/SignUpComplete';
 import Login from '../screens/Login';
 import ApiPractice from '../screens/ApiPractice';
 import HowToUse from '../screens/HowToUse';
+import LoginIng from '../screens/LoginIng';
+import LoginScreen from '../screens/LoginIng';
+import SignScreen from '../screens/SignUp/SignScreen';
 
 
 
@@ -35,8 +38,11 @@ function AppNavigator() {
         <Stack.Screen name="UserInfo" component={UserInfo} options={{ headerShown: false }} />
         <Stack.Screen name="SignUpComplete" component={SignUpComplete} options={{ headerShown: false }} />
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+        <Stack.Screen name="LoginIng" component={LoginIng} options={{headerShown:false}} />
         <Stack.Screen name="ApiPracitce" component={ApiPractice} options={{ headerShown: false }} />
         <Stack.Screen name="HowToUse" component={HowToUse} options={{ headerShown: false }} />
+        <Stack.Screen name="로그인" component={LoginScreen}  />
+        <Stack.Screen name="SignScreen" component={SignScreen} options={{headerShown:false}} />
       </Stack.Navigator>
   
     </>

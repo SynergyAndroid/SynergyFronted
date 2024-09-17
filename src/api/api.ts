@@ -1,3 +1,5 @@
+// api 관련 페이지
+
 import axios from 'axios';
 //const apiBaseUrl = "http://localhost:8080";
 
