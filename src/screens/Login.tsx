@@ -1,4 +1,4 @@
-
+// 일단 이거 안쓸거임
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import * as KakaoLogin from '@react-native-seoul/kakao-login';

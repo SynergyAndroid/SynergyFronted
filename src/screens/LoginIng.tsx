@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity,SafeAreaView } from 'react-native';
+//이메일로 로그인하기 
+
+import React, { useState,useRef } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity,SafeAreaView, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import InputField from '../components/inputField';
 import useForm from '../../hooks/useForm';
-
+import useAuth from '../../hooks/queries/useAuth';
 
 
 type UserInformation = {
@@ -33,7 +35,9 @@ function validateLogin(value:UserInformation){
   return errors;
 }
 
-function LoginScreen() {
+function LoginScreen() { 
+  const passwordRef = useRef<TextInput | null>(null);
+  const {loginMutation} = useAuth();
   const navigation = useNavigation();
   const login = useForm({
     initialValue:{email:'',password:''},
@@ -72,7 +76,10 @@ function LoginScreen() {
   //로그인 완료 버튼
   const handleLogin = () => {
       // 로그인 성공 시 홈 화면으로 이동
-      navigation.navigate('홈');
+      Alert.alert("로그인 성공!", "홈화면으로 이동합니다.")
+      navigation.navigate('Home');
+      console.log('login.values',login.values);
+      loginMutation.mutate(login.values)
 
     }
 

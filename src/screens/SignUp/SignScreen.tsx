@@ -1,10 +1,11 @@
 import { Alert } from 'react-native';
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView } from 'react-native';
+import { useRef } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import InputField from '../../components/inputField';
 import useForm from '../../../hooks/useForm';
-import { postSignup } from '../../api/auth';
+import useAuth from '../../../hooks/queries/useAuth';
 
 function validateSignup(values: { username: string, email: string; password: string; passwordConfirm: string }) {
   const errors = {
@@ -33,6 +34,9 @@ function validateSignup(values: { username: string, email: string; password: str
 }
 
 function SignScreen() {
+  const passwordRef = useRef<TextInput | null>(null);
+  const passwordConfirmRef = useRef<TextInput | null>(null);
+  const { signupMutation, loginMutation } = useAuth(); // 로그인 mutation 추가
   const navigation = useNavigation();
 
   // useForm 훅을 통해 입력 값과 유효성 검증 로직을 연결
@@ -59,18 +63,30 @@ function SignScreen() {
   // 회원가입 완료 버튼 핸들러
   const handleSignUp = async () => {
     try {
-      const { username, email, password } = SignUp.values;
-
-      // 회원가입 API 호출
-      await postSignup({ username, email, password });
-
-      // 회원가입 성공 시 홈 화면으로 이동
-      Alert.alert('회원가입 성공!', '홈 화면으로 이동합니다.');
-      console.log("회원가입 완료");
-      navigation.navigate('홈');
+      // 회원가입 mutation 호출
+      signupMutation.mutate(SignUp.values, {
+        onSuccess: () => {
+          // 회원가입 성공 시 로그인 mutation 호출
+          loginMutation.mutate(SignUp.values, {
+            onSuccess: () => {
+              Alert.alert('회원가입 성공!', '홈 화면으로 이동합니다.');
+              console.log("회원가입 완료", SignUp.values);
+              navigation.navigate('홈');
+            },
+            onError: (error) => {
+              console.error("로그인 중 오류:", error);
+              Alert.alert('로그인 실패', '로그인 중 문제가 발생했습니다.');
+            }
+          });
+        },
+        onError: (error) => {
+          console.error("회원가입 중 오류:", error);
+          Alert.alert('회원가입 실패', '회원가입 중 문제가 발생했습니다.');
+        }
+      });
     } catch (error) {
-      Alert.alert('회원가입 실패', '회원가입 중 문제가 발생했습니다.');
-      console.log("회원가입 실패: 오류 ", error);
+      console.error("회원가입 시 캐치된 오류:", error);
+      Alert.alert('회원가입 실패', '회원가입 중 예상치 못한 오류가 발생했습니다.');
     }
   };
 

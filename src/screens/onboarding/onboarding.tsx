@@ -52,12 +52,17 @@ const OnboardingScreen: React.FC = () => {
   // 나중에 없앨거임!!!
 
   const handleHomePress =() => {
-    navigation.navigate("홈");
+    navigation.navigate("Home");
   };
   
   
   const handleSignUpPress = () => {
     navigation.navigate('SignScreen');
+  };
+  
+  
+  const handleKaKaoLoginPress = () => {
+    navigation.navigate('카카오로그인');
   };
 
 
@@ -87,7 +92,7 @@ const OnboardingScreen: React.FC = () => {
           />
         ))}
       </View>
-      <TouchableOpacity style={styles.loginButton} onPress={handleLoginPress}>
+      <TouchableOpacity style={styles.loginButton} onPress={handleKaKaoLoginPress}>
         <Image
           source={require('../../components/assets/images/kakao_login_medium_wide.png')}
           style={styles.kakaoSymbol}

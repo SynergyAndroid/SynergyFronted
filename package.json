@@ -21,6 +21,7 @@
     "axios": "^1.7.3",
     "react": "18.2.0",
     "react-native": "0.74.5",
+    "react-native-config": "^1.5.3",
     "react-native-dotenv": "^3.4.11",
     "react-native-encrypted-storage": "^4.0.3",
     "react-native-gesture-handler": "^2.18.1",
@@ -35,7 +36,7 @@
     "react-native-svg": "^15.6.0",
     "react-native-swipe-list-view": "^3.2.9",
     "react-native-vector-icons": "^10.1.0",
-    "react-native-webview": "^13.12.1"
+    "react-native-webview": "^13.12.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

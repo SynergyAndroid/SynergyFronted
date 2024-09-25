@@ -5,6 +5,7 @@ import Icon from "react-native-vector-icons/Foundation";
 import axios from "axios";
 import BottomBar from "../components/bottom";
 import { useNavigation } from '@react-navigation/native';
+
 import { 
     REACT_APP_YUMMY, 
     REACT_APP_ROAD, 
@@ -74,7 +75,7 @@ const Home = () => {
                 ListHeaderComponent={
                     <>
                         <View style={styles.topSection}>
-                        <TouchableOpacity onPress={() => navigation.navigate('HowToUse')} style={styles.notification} >
+                        <TouchableOpacity onPress={() => navigation.navigate('사용방법')} style={styles.notification} >
 
                             <Icon
                                 name="list"
