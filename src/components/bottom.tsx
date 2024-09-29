@@ -1,19 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import Icon from 'react-native-vector-icons/Octicons';
-import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
-import { useNavigation, useNavigationState } from '@react-navigation/native';
+import {TouchableOpacity, View, Text, StyleSheet} from 'react-native';
+import {useNavigation, useNavigationState} from '@react-navigation/native';
 
 const BottomBar = () => {
   const [selectedTab, setSelectedTab] = useState('홈');
   const navigation = useNavigation();
-  const currentRouteName = useNavigationState(state =>  state?.routes[state.index]?.name);
+  const currentRouteName = useNavigationState(
+    state => state?.routes[state.index]?.name,
+  );
 
   const tabs = [
-    { name: '홈', icon: 'home', screen: '홈' },
-    { name: '커뮤니티', icon: 'people', screen: '커뮤니티' },
-    { name: '글 작성', icon: 'plus-circle', screen: '새로운 글 작성' },
-    { name: '채팅', icon: 'mail', screen: '채팅목록' },
-    { name: '프로필', icon: 'person', screen: '프로필' },
+    {name: '홈', icon: 'home', screen: 'Home'},
+    {name: '커뮤니티', icon: 'people', screen: 'Community'},
+    {name: '새로운 글 작성', icon: 'plus-circle', screen: 'NewPost'},
+    {name: '채팅목록', icon: 'mail', screen: 'ChatList'},
+    {name: '프로필', icon: 'person', screen: 'Profile'},
   ];
 
   useEffect(() => {
@@ -27,14 +29,13 @@ const BottomBar = () => {
 
   return (
     <View style={styles.container}>
-      {tabs.map((tab) => (
+      {tabs.map(tab => (
         <TouchableOpacity
           key={tab.name}
           onPress={() => {
             navigation.navigate(tab.screen);
           }}
-          style={styles.tabItem}
-        >
+          style={styles.tabItem}>
           <Icon
             name={tab.icon}
             size={24}
@@ -44,8 +45,7 @@ const BottomBar = () => {
             style={[
               styles.labelStyle,
               selectedTab === tab.name && styles.selectedLabelStyle,
-            ]}
-          >
+            ]}>
             {tab.name}
           </Text>
         </TouchableOpacity>
