@@ -5,7 +5,7 @@ import WebView, { WebViewMessageEvent, WebViewNavigation } from "react-native-we
 import axios from 'axios'; // axios import 추가
 
 const REDIRECT_URI = `https://172.21.73.166:9090/oauth/kakao/callback`;
-const KAKAO_REST_API_KEY = `89a1a373df888fa03ee6086aa05eb30f`;
+const KAKAO_REST_API_KEY = `89a1a373df888fa03ee6086agita05eb30f`;
 
 function KakaoLogin() {
     const { kakaoLoginMutation } = useAuth();
