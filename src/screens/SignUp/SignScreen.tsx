@@ -13,7 +13,9 @@ import {useNavigation} from '@react-navigation/native';
 import InputField from '../../components/inputField';
 import useForm from '../../../hooks/useForm';
 import useAuth from '../../../hooks/queries/useAuth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// 회원가입 유효성 검사 함수
 function validateSignup(values: {
   username: string;
   email: string;
@@ -37,7 +39,7 @@ function validateSignup(values: {
     errors.password = '비밀번호는 8에서 20자리로 입력해주세요';
   }
 
-  // 비밀번호와 비밀번호 확인이 일치하지 않으면 에러 메시지 출력
+  // 비밀번호 확인
   if (values.password !== values.passwordConfirm) {
     errors.passwordConfirm = '비밀번호가 일치하지 않습니다.';
   }
@@ -48,6 +50,7 @@ function validateSignup(values: {
 function SignScreen() {
   useRef<TextInput | null>(null);
   useRef<TextInput | null>(null);
+
   const {signupMutation, loginMutation} = useAuth(); // 로그인 mutation 추가
   const navigation = useNavigation();
 
@@ -75,14 +78,14 @@ function SignScreen() {
   // 회원가입 완료 버튼 핸들러
   const handleSignUp = async () => {
     try {
-      // 회원가입 mutation 호출
       signupMutation.mutate(SignUp.values, {
         onSuccess: () => {
-          // 회원가입 성공 시 로그인 mutation 호출
+          // 로그인 mutation 호출
           loginMutation.mutate(SignUp.values, {
-            onSuccess: () => {
+            onSuccess: async () => {
               Alert.alert('회원가입 성공!', '홈 화면으로 이동합니다.');
               console.log('회원가입 완료', SignUp.values);
+              await AsyncStorage.setItem('username', SignUp.values.username);
               navigation.navigate('Home');
             },
             onError: error => {

@@ -49,8 +49,9 @@ function LoginScreen() {
   const handleLogin = () => {
     // 로그인 성공 시 홈 화면으로 이동
     Alert.alert('로그인 성공!', '홈화면으로 이동합니다.');
-    navigation.navigate('홈');
+    navigation.navigate('Home');
     console.log('login.values', login.values);
+    // @ts-ignore
     loginMutation.mutate(login.values);
   };
 

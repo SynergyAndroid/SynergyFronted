@@ -13,15 +13,25 @@ import axios from 'axios';
 import BottomBar from '../components/bottom';
 import {useNavigation} from '@react-navigation/native';
 import {REACT_APP_YUMMY, REACT_APP_ROAD, REACT_APP_TRIP} from '@env';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {RootStackParamList} from '../navigation';
+import {StackNavigationProp} from '@react-navigation/stack';
+
+// HomeScreenProp 타입 정의 (RootStackParamList의 'Home' 스크린에 대한 타입)
+type HomeScreenProp = StackNavigationProp<RootStackParamList, 'Home'>;
 
 const Home = () => {
+  const navigation = useNavigation<HomeScreenProp>();
   const [items, setItems] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('맛집'); // Default selection
   const [error, setError] = useState(null);
-  const navigation = useNavigation();
-
+  const [username, setUsername] = useState<string | null>(null);
   useEffect(() => {
     const fetchApiData = async () => {
+      const storedUsername = await AsyncStorage.getItem('username');
+      if (storedUsername) {
+        setUsername(storedUsername);
+      }
       let url = '';
 
       switch (selectedCategory) {
@@ -76,13 +86,15 @@ const Home = () => {
           <>
             <View style={styles.topSection}>
               <TouchableOpacity
-                onPress={() => navigation.navigate('사용방법')}
+                onPress={() => navigation.navigate('HowToUse')}
                 style={styles.notification}>
                 <Icon name="list" size={25} color="black" />
               </TouchableOpacity>
 
               <View style={styles.greetingContainer}>
-                <Text style={styles.greetingText}>안녕하세요 혜원님!</Text>
+                <Text style={styles.greetingText}>
+                  안녕하세요 {username ? `${username}님!` : '회원님'}!
+                </Text>
                 <Text style={styles.subGreetingText}>
                   우리 오늘은 어디로 떠나볼까요?
                 </Text>
