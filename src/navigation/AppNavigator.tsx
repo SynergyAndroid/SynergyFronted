@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  createNativeStackNavigator,
-  NativeStackScreenProps,
-} from '@react-navigation/native-stack';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Home from '../screens/Home';
 import NewPost from '../screens/NewPost';
 import Community from '../screens/Community';
@@ -12,15 +9,23 @@ import ChatList from '../screens/ChatList';
 import PostDetail from '../screens/PostDetail';
 import HowToUse from '../screens/HowToUse';
 
+// Post 타입을 정의합니다.
+interface Post {
+  id: number;
+  title: string;
+  content: string;
+  replyList: Comment[];
+}
+
 type RootStackParamList = {
   Home: undefined;
   NewPost: undefined;
   Community: undefined;
-  PostDetail: undefined;
+  PostDetail: {post: Post};
   Profile: undefined;
   Chat: undefined;
   ChatList: undefined;
-  사용방법: undefined;
+  HowToUse: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -56,7 +61,7 @@ function AppNavigator(): JSX.Element {
         options={{headerShown: false}}
       />
       <Stack.Screen
-        name="사용방법"
+        name="HowToUse"
         component={HowToUse}
         options={{headerShown: false}}
       />

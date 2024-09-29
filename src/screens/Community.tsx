@@ -1,7 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import BottomBar from '../components/bottom';
@@ -21,16 +27,20 @@ const Community: React.FC = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await axios.get('http://172.30.1.64:9090/community/list');
-        
+        const response = await axios.get(
+          'http://172.30.1.64:9090/community/list',
+        );
         // 서버에서 반환된 전체 데이터를 콘솔에 출력
         console.log('Response data:', response.data);
 
-        const contentData = response.data?.content; // response.data.content가 정의되어 있는지 확인
+        const contentData = response.data?.content; // response.data 가 정의되어 있는지 확인
 
-        if (Array.isArray(contentData)) { // contentData가 배열인지 확인
-          const sortedPosts = contentData.sort((a: Post, b: Post) => 
-            new Date(b.createDate).getTime() - new Date(a.createDate).getTime()
+        if (Array.isArray(contentData)) {
+          // contentData가 배열인지 확인
+          const sortedPosts = contentData.sort(
+            (a: Post, b: Post) =>
+              new Date(b.createDate).getTime() -
+              new Date(a.createDate).getTime(),
           );
           setPosts(sortedPosts);
         } else {
@@ -46,7 +56,7 @@ const Community: React.FC = () => {
         } else {
           console.error('Request error:', error.message);
         }
-        setPosts([]); 
+        setPosts([]);
       }
     };
 
@@ -56,14 +66,18 @@ const Community: React.FC = () => {
   // 날짜 포맷 함수
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleString('ko-KR', {
-      month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit'
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
     });
   };
 
   // 각 게시물을 렌더링하는 함수
   const renderPost = (post: Post) => (
     <View key={post.id} style={styles.postContainer}>
-      <TouchableOpacity onPress={() => navigation.navigate('상세글 보기', { post })}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('PostDetail', {post})}>
         <View style={styles.profileContainer}>
           <View style={styles.profileIconContainer}>
             <Icon name="user" size={30} color="#fff" />
@@ -73,17 +87,21 @@ const Community: React.FC = () => {
             <Text style={styles.dateText}>{formatDate(post.createDate)}</Text>
           </View>
         </View>
-        <Text style={styles.title}>{post.title || "No Title"}</Text>
-        <Text style={styles.content}>{post.content || "No Content"}</Text>
+        <Text style={styles.title}>{post.title || 'No Title'}</Text>
+        <Text style={styles.content}>{post.content || 'No Content'}</Text>
       </TouchableOpacity>
-      
+
       <View style={styles.replyContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('상세글 보기', { post })}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('PostDetail', {post})}>
           <View style={styles.replyContent}>
-            <Icon name="message1" size={20} color="#888" style={styles.replyIcon} />
-            <Text style={styles.replyCount}>
-              {post.replyList.length}
-            </Text>
+            <Icon
+              name="message1"
+              size={20}
+              color="#888"
+              style={styles.replyIcon}
+            />
+            <Text style={styles.replyCount}>{post.replyList.length}</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -92,16 +110,17 @@ const Community: React.FC = () => {
 
   return (
     <View style={styles.firstContainer}>
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Ionicons
-          name="arrow-back"
-          size={25}
-          color="black"
-        />
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => navigation.goBack()}>
+        <Ionicons name="arrow-back" size={25} color="black" />
       </TouchableOpacity>
       <ScrollView style={styles.container}>
-
-        {posts.length > 0 ? posts.map(renderPost) : <Text>No posts available.</Text>}
+        {posts.length > 0 ? (
+          posts.map(renderPost)
+        ) : (
+          <Text>No posts available.</Text>
+        )}
       </ScrollView>
       <BottomBar />
     </View>
@@ -109,13 +128,12 @@ const Community: React.FC = () => {
 };
 
 const styles = StyleSheet.create({
-  firstContainer:{
-
-    flex:1,
+  firstContainer: {
+    flex: 1,
   },
   container: {
     flex: 1,
-    padding:40,
+    padding: 40,
     backgroundColor: '#fff',
   },
   backButton: {
@@ -123,7 +141,7 @@ const styles = StyleSheet.create({
     top: 10,
     left: 10,
     zIndex: 1,
-},
+  },
   pageTitle: {
     fontSize: 24,
     fontWeight: 'bold',
@@ -148,7 +166,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
-    backgroundColor: 'grey', 
+    backgroundColor: 'grey',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 10,

@@ -1,43 +1,67 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
 import axios from 'axios';
-import { useNavigation } from '@react-navigation/native';
 
-
+// 댓글 타입 정의
 interface Comment {
   id: number;
   content: string;
 }
 
-interface PostDetailProps {
-  route: any;
+// Post 타입 정의
+interface Post {
+  id: number;
+  title: string;
+  content: string;
+  replyList: Comment[];
 }
 
-const PostDetail: React.FC<PostDetailProps> = ({ route }) => {
-  const { post } = route.params;
+interface PostDetailProps {
+  route: {
+    params: {
+      post: Post;
+    };
+  };
+}
+
+const PostDetail: React.FC<PostDetailProps> = ({route}) => {
+  const {post} = route.params;
   const [newComment, setNewComment] = useState('');
-  const [comments, setComments] = useState<Comment[]>([]);  // 초기 댓글 목록을 빈 배열로 설정
+  const [comments, setComments] = useState<Comment[]>([]); // 초기 댓글 목록을 빈 배열로 설정
 
   // 페이지 로드 시 댓글 목록을 가져오는 함수
   useEffect(() => {
     if (post.replyList) {
-      setComments(post.replyList);  // post.replyList에서 댓글 목록 가져오기
+      setComments(post.replyList);
     }
   }, [post.replyList]);
 
   const handleAddComment = async () => {
     if (newComment.trim()) {
       try {
-        const response = await axios.post(`http://172.30.1.64:9090/reply/create/${post.id}`, {
-          content: newComment,
-        });
+        const response = await axios.post(
+          `http://172.30.1.64:9090/reply/create/${post.id}`,
+          {
+            content: newComment,
+          },
+        );
 
         if (response.status === 200) {
           console.log('댓글이 성공적으로 추가되었습니다.');
           setNewComment(''); // 댓글이 추가된 후 입력 필드 초기화
-          
+
           // 새 댓글이 추가된 후 댓글 목록을 수동으로 업데이트
-          const updatedComments = [...comments, { id: response.data.id, content: newComment }];
+          const updatedComments = [
+            ...comments,
+            {id: response.data.id, content: newComment},
+          ];
           setComments(updatedComments);
         } else {
           console.error('댓글 추가에 실패했습니다:', response.data);
@@ -50,13 +74,13 @@ const PostDetail: React.FC<PostDetailProps> = ({ route }) => {
 
   return (
     <ScrollView style={styles.container}>
-        <View style={styles.postContainer}>
-            <Text style={styles.title}>{post.title}</Text>
-            <Text style={styles.content}>{post.content}</Text>
-        </View>
-      
+      <View style={styles.postContainer}>
+        <Text style={styles.title}>{post.title}</Text>
+        <Text style={styles.content}>{post.content}</Text>
+      </View>
+
       <View style={styles.divider} />
-      
+
       <View style={styles.commentsContainer}>
         <Text style={styles.commentsTitle}>댓글 {comments.length}개</Text>
         {comments.length > 0 ? (
@@ -66,7 +90,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ route }) => {
             </View>
           ))
         ) : (
-          <Text>No comments yet.</Text>
+          <Text> 아직 아무런 댓글이 없습니다. </Text>
         )}
       </View>
 
@@ -93,8 +117,7 @@ const styles = StyleSheet.create({
   },
   postContainer: {
     marginBottom: 16,
-    marginTop:10,
-    
+    marginTop: 10,
   },
   title: {
     fontSize: 24,
