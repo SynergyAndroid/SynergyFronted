@@ -1,5 +1,5 @@
 import React from 'react';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+// import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Home from '../screens/Home';
 import NewPost from '../screens/NewPost';
 import Community from '../screens/Community';
@@ -8,6 +8,7 @@ import Chat from '../screens/Chat';
 import ChatList from '../screens/ChatList';
 import PostDetail from '../screens/PostDetail';
 import HowToUse from '../screens/HowToUse';
+import {createStackNavigator} from '@react-navigation/stack';
 
 // Post 타입을 정의합니다.
 interface Post {
@@ -17,7 +18,7 @@ interface Post {
   replyList: Comment[];
 }
 
-type RootStackParamList = {
+export type RootStackParamList = {
   Home: undefined;
   NewPost: undefined;
   Community: undefined;
@@ -28,7 +29,7 @@ type RootStackParamList = {
   HowToUse: undefined;
 };
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const Stack = createStackNavigator<RootStackParamList>();
 
 function AppNavigator(): JSX.Element {
   return (

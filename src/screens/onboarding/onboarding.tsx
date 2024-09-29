@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import React, {useState} from 'react';
+import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import PagerView from 'react-native-pager-view';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 // import * as KakaoLogin from '@react-native-seoul/kakao-login';
-
 const OnboardingScreen: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(0);
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const onboardingData = [
     {
@@ -45,34 +44,30 @@ const OnboardingScreen: React.FC = () => {
   };
 
   const handleLoginPress = () => {
-    navigation.navigate("로그인");
+    navigation.navigate('Login');
   };
 
   // 홈버튼으로 일단 넘어가게 하려고 만든거임...
   // 나중에 없앨거임!!!
 
-  const handleHomePress =() => {
-    navigation.navigate("Home");
+  const handleHomePress = () => {
+    navigation.navigate('Home');
   };
-  
-  
+
   const handleSignUpPress = () => {
     navigation.navigate('SignScreen');
   };
-  
-  
-  const handleKaKaoLoginPress = () => {
-    navigation.navigate('카카오로그인');
-  };
 
+  const handleKaKaoLoginPress = () => {
+    navigation.navigate('KakaoLogin');
+  };
 
   return (
     <View style={styles.container}>
       <PagerView
         style={styles.pagerView}
         initialPage={0}
-        onPageSelected={handlePageChange}
-      >
+        onPageSelected={handlePageChange}>
         {onboardingData.map((item, index) => (
           <View key={index} style={styles.page}>
             <Image source={item.image} style={styles.image} />
@@ -92,24 +87,25 @@ const OnboardingScreen: React.FC = () => {
           />
         ))}
       </View>
-      <TouchableOpacity style={styles.loginButton} onPress={handleKaKaoLoginPress}>
+      <TouchableOpacity
+        style={styles.loginButton}
+        onPress={handleKaKaoLoginPress}>
         <Image
           source={require('../../components/assets/images/kakao_login_medium_wide.png')}
           style={styles.kakaoSymbol}
         />
       </TouchableOpacity>
-      <TouchableOpacity style={styles.loginEmailButton} onPress={handleLoginPress}>
-        <Text style={styles.loginText}>
-          이메일로 로그인하기 
-        </Text>
+      <TouchableOpacity
+        style={styles.loginEmailButton}
+        onPress={handleLoginPress}>
+        <Text style={styles.loginText}>이메일로 로그인하기</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.SignupButton} onPress={handleSignUpPress}>
         <Text>회원가입하기</Text>
       </TouchableOpacity>
-      <TouchableOpacity  onPress={handleHomePress}>
+      <TouchableOpacity onPress={handleHomePress}>
         <Text>홈버튼</Text>
       </TouchableOpacity>
-      
     </View>
   );
 };
@@ -122,7 +118,6 @@ const styles = StyleSheet.create({
   },
   pagerView: {
     flex: 1,
-    
   },
   page: {
     justifyContent: 'center',
@@ -138,11 +133,11 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight:'bold',
+    fontWeight: 'bold',
     color: 'black',
     textAlign: 'center',
     marginBottom: 20,
-    marginTop:20
+    marginTop: 20,
   },
   text: {
     fontSize: 16,
@@ -159,55 +154,51 @@ const styles = StyleSheet.create({
     height: 10,
     width: 10,
     borderRadius: 5,
-    borderColor:"black",
-    borderWidth: 1, 
-    backgroundColor: 'transparent', 
+    borderColor: 'black',
+    borderWidth: 1,
+    backgroundColor: 'transparent',
     marginHorizontal: 5,
   },
   activeIndicator: {
     backgroundColor: 'black',
   },
-  SignupButton:{
-    alignItems:"center",
-    
-
+  SignupButton: {
+    alignItems: 'center',
   },
   loginButton: {
     backgroundColor: '#FEE500',
     padding: 2,
     alignItems: 'center',
     marginHorizontal: 40,
-    marginTop:30,
+    marginTop: 30,
     marginBottom: 10,
     borderRadius: 15,
   },
-  loginEmailButton :{
-    backgroundColor:"black",
-    padding:15,
-    alignItems: "center",
-    marginHorizontal:40,
+  loginEmailButton: {
+    backgroundColor: 'black',
+    padding: 15,
+    alignItems: 'center',
+    marginHorizontal: 40,
     borderRadius: 15,
-    marginBottom:20,
-
+    marginBottom: 20,
   },
-  loginText:{
-    color:"white",
-    fontWeight:'bold',
-
+  loginText: {
+    color: 'white',
+    fontWeight: 'bold',
   },
-  
+
   kakaoSymbol: {
-    width: "100%",  
-    height: undefined, 
-    aspectRatio: 6, 
+    width: '100%',
+    height: undefined,
+    aspectRatio: 6,
     resizeMode: 'contain',
   },
   signUpText: {
     fontSize: 14,
     textAlign: 'center',
     marginBottom: 20,
-    color: '#000000D9', 
-  }
+    color: '#000000D9',
+  },
 });
 
 export default OnboardingScreen;

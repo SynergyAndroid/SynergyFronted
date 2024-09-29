@@ -1,13 +1,25 @@
-import { Alert } from 'react-native';
+import {Alert} from 'react-native';
 import React from 'react';
-import { useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, TextInput } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import {useRef} from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  SafeAreaView,
+  TextInput,
+} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
 import InputField from '../../components/inputField';
 import useForm from '../../../hooks/useForm';
 import useAuth from '../../../hooks/queries/useAuth';
 
-function validateSignup(values: { username: string, email: string; password: string; passwordConfirm: string }) {
+function validateSignup(values: {
+  username: string;
+  email: string;
+  password: string;
+  passwordConfirm: string;
+}) {
   const errors = {
     username: '',
     email: '',
@@ -34,20 +46,20 @@ function validateSignup(values: { username: string, email: string; password: str
 }
 
 function SignScreen() {
-  const passwordRef = useRef<TextInput | null>(null);
-  const passwordConfirmRef = useRef<TextInput | null>(null);
-  const { signupMutation, loginMutation } = useAuth(); // 로그인 mutation 추가
+  useRef<TextInput | null>(null);
+  useRef<TextInput | null>(null);
+  const {signupMutation, loginMutation} = useAuth(); // 로그인 mutation 추가
   const navigation = useNavigation();
 
   // useForm 훅을 통해 입력 값과 유효성 검증 로직을 연결
   const SignUp = useForm({
-    initialValue: { username: '', email: '', password: '', passwordConfirm: '' },
+    initialValue: {username: '', email: '', password: '', passwordConfirm: ''},
     validate: validateSignup,
   });
 
   // 모든 필드가 채워지고, 에러가 없는지 확인하는 함수
   const isFormValid = () => {
-    const { values, errors } = SignUp;
+    const {values, errors} = SignUp;
     return (
       values.username.length > 0 &&
       values.email.length > 0 &&
@@ -70,23 +82,26 @@ function SignScreen() {
           loginMutation.mutate(SignUp.values, {
             onSuccess: () => {
               Alert.alert('회원가입 성공!', '홈 화면으로 이동합니다.');
-              console.log("회원가입 완료", SignUp.values);
-              navigation.navigate('홈');
+              console.log('회원가입 완료', SignUp.values);
+              navigation.navigate('Home');
             },
-            onError: (error) => {
-              console.error("로그인 중 오류:", error);
+            onError: error => {
+              console.error('로그인 중 오류:', error);
               Alert.alert('로그인 실패', '로그인 중 문제가 발생했습니다.');
-            }
+            },
           });
         },
-        onError: (error) => {
-          console.error("회원가입 중 오류:", error);
+        onError: error => {
+          console.error('회원가입 중 오류:', error);
           Alert.alert('회원가입 실패', '회원가입 중 문제가 발생했습니다.');
-        }
+        },
       });
     } catch (error) {
-      console.error("회원가입 시 캐치된 오류:", error);
-      Alert.alert('회원가입 실패', '회원가입 중 예상치 못한 오류가 발생했습니다.');
+      console.error('회원가입 시 캐치된 오류:', error);
+      Alert.alert(
+        '회원가입 실패',
+        '회원가입 중 예상치 못한 오류가 발생했습니다.',
+      );
     }
   };
 
@@ -128,8 +143,7 @@ function SignScreen() {
       <TouchableOpacity
         style={[styles.buttonStyle, !isFormValid() && styles.buttonDisabled]}
         onPress={handleSignUp}
-        disabled={!isFormValid()}
-      >
+        disabled={!isFormValid()}>
         <Text style={styles.buttonText}>회원가입 완료!</Text>
       </TouchableOpacity>
     </SafeAreaView>
