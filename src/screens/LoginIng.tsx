@@ -1,5 +1,3 @@
-//이메일로 로그인하기
-
 import React from 'react';
 import {
   View,
@@ -14,26 +12,24 @@ import InputField from '../components/inputField';
 import useForm from '../../hooks/useForm';
 import useAuth from '../../hooks/queries/useAuth';
 
+// 사용자 이름과 비밀번호 타입 정의
 type UserInformation = {
-  email: string;
+  username: string;
   password: string;
 };
 
-//유효성 검증 훅을 사용한 함수사용하기
-//에러를 리턴함..
+// 유효성 검증 훅 사용
 function validateLogin(value: UserInformation) {
   const errors = {
-    email: '',
+    username: '',
     password: '',
   };
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.email)) {
-    errors.email = '올바른 이메일 형식이 아닙니다.';
+  if (!value.username.trim()) {
+    errors.username = '사용자 이름을 입력해주세요.';
   }
-  //이메일 형식이 올바르지 않다면 에러메시지 출력하삼요
 
-  //비밀번호 검증하기
-  if (!(value.password.length >= 8 && value.password.length < 20)) {
-    errors.password = '비밀번호는 8에서 20자리로 입력해주세요';
+  if (!(value.password.length >= 8 && value.password.length <= 20)) {
+    errors.password = '비밀번호는 8~20자리로 입력해주세요';
   }
 
   return errors;
@@ -43,65 +39,41 @@ function LoginScreen() {
   const {loginMutation} = useAuth();
   const navigation = useNavigation();
   const login = useForm({
-    initialValue: {email: '', password: ''},
+    initialValue: {username: '', password: ''},
     validate: validateLogin,
   });
   const handleLogin = () => {
-    // 로그인 성공 시 홈 화면으로 이동
-    Alert.alert('로그인 성공!', '홈화면으로 이동합니다.');
-    navigation.navigate('Home');
-    console.log('login.values', login.values);
-    // @ts-ignore
-    loginMutation.mutate(login.values);
+    loginMutation.mutate(login.values, {
+      onSuccess: () => {
+        Alert.alert('로그인 성공!', '홈화면으로 이동합니다.');
+        navigation.navigate('Home');
+      },
+      onError: () => {
+        Alert.alert(
+          '로그인 실패',
+          '사용자 이름 또는 비밀번호가 올바르지 않습니다.',
+        );
+      },
+    });
   };
-
-  /*
-  객체형태로 만들기 전!
-
-  const [email,setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-
-  const handleChangeEmail = (text:string)=> {
-    setEmail(text);
-  }
-  const handleChangePassword = (text:string) => {
-    setPassword(text);
-  }
-  이렇게 하면 그냥
-  value= {email}
-  onChangeText={handleChangeEmail}
-  이렇게 해주면 되는데..
-
-  */
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.inputContainer}>
-        <Text>이메일</Text>
+        <Text>사용자 이름</Text>
         <InputField
-          placeholder="이메일을 입력하세요"
-          error={login.errors.email}
-          touched={login.touched.email}
-          inputMode="email"
-          {...login.getTextInputProps('email')}
-          onBlur={() => {
-            login.getTextInputProps('email').onBlur();
-          }} // useForm에서 props 가져오기
+          placeholder="사용자 이름을 입력하세요"
+          error={login.errors.username}
+          touched={login.touched.username}
+          {...login.getTextInputProps('username')}
         />
         <Text>비밀번호</Text>
         <InputField
           placeholder="비밀번호"
           error={login.errors.password}
           secureTextEntry
-          // 비밀번호가 마스킹 처리되어서 나타남
           touched={login.touched.password}
           {...login.getTextInputProps('password')}
-          onBlur={() => {
-            login.getTextInputProps('password').onBlur();
-            // 추가 처리
-            console.log('비밀번호 필드에서 블러 이벤트가 발생했습니다!');
-          }}
         />
       </View>
       <TouchableOpacity style={styles.buttonStyle} onPress={handleLogin}>
@@ -111,60 +83,6 @@ function LoginScreen() {
   );
 }
 
-/*
-
-const LoginIng = () => {
-  const [inputId, setInputId] = useState('');
-  const [inputPassword, setInputPassword] = useState('');
-  const [error, setError] = useState('');
-  const navigation = useNavigation();
-
-
-  const storedId = 'testUser';
-  const storedPassword = '1234';
-
-  const handleLogin = () => {
-    if (inputId === storedId && inputPassword === storedPassword) {
-      // 로그인 성공 시 홈 화면으로 이동
-      navigation.navigate('홈');
-    } else {
-      // 로그인 실패 시 오류 메시지 설정
-      setError('아이디 또는 비밀번호가 올바르지 않습니다.');
-    }
-  };
-
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>로그인</Text>
-
-      <TextInput
-        style={styles.input}
-        placeholder="아이디"
-        value={inputId}
-        onChangeText={setInputId}
-      />
-
-      <TextInput
-        style={styles.input}
-        placeholder="비밀번호"
-        value={inputPassword}
-        onChangeText={setInputPassword}
-        secureTextEntry={true}
-      />
-
-      {error ? <Text style={styles.errorText}>{error}</Text> : null}
-      <View style={styles.findLogin}>
-        <Text>아이디 찾기   </Text>
-        <Text>비밀번호찾기</Text>
-      </View>
-
-        <TouchableOpacity style={styles.buttonStyle} onPress={handleLogin} >
-            <Text style={styles.buttonText}>다음</Text>
-      </TouchableOpacity>
-    </View>
-  );
-};
-*/
 const styles = StyleSheet.create({
   inputContainer: {
     gap: 20,

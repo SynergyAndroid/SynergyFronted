@@ -1,5 +1,3 @@
-// src/utils/storage.ts
-/*
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // 사용자 이름 저장
@@ -30,5 +28,13 @@ export const removeUsername = async () => {
     console.error('Error removing username:', error);
   }
 };
-*/
-// 일단 사용안함
+
+// 모든 데이터 초기화
+export const clearAllData = async () => {
+  try {
+    await AsyncStorage.clear();
+    console.log('All data cleared.');
+  } catch (error) {
+    console.error('Error clearing all data:', error);
+  }
+};
