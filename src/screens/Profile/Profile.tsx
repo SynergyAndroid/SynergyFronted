@@ -12,8 +12,10 @@ import {useProfileAsyncStorage} from './ProfileAsyncStroage.tsx'; // 커스텀 �
 import {usePhotoPicker} from './ProfilePhoto.tsx'; // 사진 관리 훅 불러오기
 import DateTimePicker from '@react-native-community/datetimepicker'; // DateTimePicker 사용
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation} from '@react-navigation/native';
 
 const ProfileEdit = () => {
+  const navigation = useNavigation();
   const {birthdate, saveBirthdate} = useProfileAsyncStorage(); // 생년월일 관리 훅
   const {photo, selectPhotoFromGallery, takePhotoWithCamera} = usePhotoPicker(); // 사진 관리 훅
   const [username, setUsername] = useState('');
@@ -152,6 +154,15 @@ const ProfileEdit = () => {
           <Text style={styles.infoLabel}>내 위치 수정하기</Text>
           <Icon name="right" size={16} color="#ccc" />
         </TouchableOpacity>
+        <TouchableOpacity
+          onPress={async () => {
+            await AsyncStorage.removeItem('username'); // 로그아웃 처리
+            setUsername(null); // 상태 업데이트
+            navigation.navigate('Login'); // 로그인 화면으로 이동
+          }}
+          style={styles.logoutRow}>
+          <Text style={styles.logoutLabel}>로그아웃</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -242,6 +253,19 @@ const styles = StyleSheet.create({
   },
   modalIcon: {
     marginLeft: 10,
+  },
+  logoutRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
+  logoutLabel: {
+    fontSize: 13,
+    fontWeight: 'bold',
+    color: '#CC1100',
   },
 });
 
