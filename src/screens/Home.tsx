@@ -110,45 +110,46 @@ const Home = () => {
               </View>
             </View>
 
+            {/* 카테고리 탭 */}
             <View style={styles.buttonContainer}>
               <TouchableOpacity
                 style={[
-                  styles.categoryButton,
-                  selectedCategory === '맛집' && styles.selectedButton,
+                  styles.categoryTab,
+                  selectedCategory === '맛집' && styles.selectedTab,
                 ]}
                 onPress={() => setSelectedCategory('맛집')}>
                 <Text
                   style={[
-                    styles.buttonText,
-                    selectedCategory === '맛집' && styles.selectedButtonText,
+                    styles.tabText,
+                    selectedCategory === '맛집' && styles.selectedTabText,
                   ]}>
                   내 근처 맛집
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[
-                  styles.categoryButton,
-                  selectedCategory === '산책길' && styles.selectedButton,
+                  styles.categoryTab,
+                  selectedCategory === '산책길' && styles.selectedTab,
                 ]}
                 onPress={() => setSelectedCategory('산책길')}>
                 <Text
                   style={[
-                    styles.buttonText,
-                    selectedCategory == '산책길' && styles.selectedButtonText,
+                    styles.tabText,
+                    selectedCategory === '산책길' && styles.selectedTabText,
                   ]}>
                   내 근처 산책길
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={[
-                  styles.categoryButton,
-                  selectedCategory === '여행' && styles.selectedButton,
+                  styles.categoryTab,
+                  selectedCategory === '여행' && styles.selectedTab,
                 ]}
                 onPress={() => setSelectedCategory('여행')}>
                 <Text
                   style={[
-                    styles.buttonText,
-                    selectedCategory == '여행' && styles.selectedButtonText,
+                    styles.tabText,
+                    selectedCategory === '여행' && styles.selectedTabText,
                   ]}>
                   내 근처 여행
                 </Text>
@@ -193,11 +194,6 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     position: 'relative',
   },
-  mapImage: {
-    width: 140,
-    height: 200,
-    marginRight: 20,
-  },
   greetingContainer: {
     flex: 1,
     paddingLeft: 10,
@@ -216,58 +212,46 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
   },
   buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around', // 탭을 균등하게 배치
     paddingHorizontal: 10,
     paddingVertical: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 20,
+    borderBottomColor: '#ddd', // 탭 아래 구분선을 넣어줌
+    borderBottomWidth: 1,
   },
-  categoryButton: {
-    flex: 1,
+  categoryTab: {
     paddingVertical: 15,
-    marginHorizontal: 5,
-    backgroundColor: '#F0F0F0',
-    borderRadius: 30,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 10,
   },
-  selectedButton: {
-    backgroundColor: '#7d965e',
+  selectedTab: {
+    borderBottomWidth: 2, // 선택된 탭에 밑줄 추가
+    borderBottomColor: '#7d965e', // 선택된 탭의 밑줄 색상 (초록색)
   },
-  buttonText: {
+  tabText: {
     fontSize: 15,
-    //fontWeight:"bold",
-    color: '#000',
+    color: 'black', // 기본 텍스트 색상
   },
-  selectedButtonText: {
-    color: 'white',
+  selectedTabText: {
+    color: '#000', // 선택된 탭의 텍스트 색상
     fontWeight: 'bold',
   },
   itemContainer: {
     flex: 1,
     margin: 10,
+    marginHorizontal: 15,
     backgroundColor: 'white',
     borderRadius: 10,
     borderColor: 'black',
     overflow: 'hidden',
-    //elevation: 2,
-    //shadowColor: "black",
-    //shadowOffset: { width: 0, height: 2 },
-    ///shadowOpacity: 0.3,
-    //shadowRadius: 5,
   },
   image: {
     width: '100%',
-    height: 150,
+    height: 180,
   },
   iconContainer: {
     width: '100%',
-    height: 150,
+    height: 180,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#f0f0f0',

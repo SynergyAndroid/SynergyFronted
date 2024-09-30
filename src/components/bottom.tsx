@@ -41,13 +41,6 @@ const BottomBar = () => {
             size={24}
             color={selectedTab === tab.name ? '#005F40' : '#000'}
           />
-          <Text
-            style={[
-              styles.labelStyle,
-              selectedTab === tab.name && styles.selectedLabelStyle,
-            ]}>
-            {tab.name}
-          </Text>
         </TouchableOpacity>
       ))}
     </View>
