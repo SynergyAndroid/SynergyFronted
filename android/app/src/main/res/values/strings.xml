@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Synergy</string>
+    <string name="kakao_app_key">d780444afe452ec61b1483e9ef8326ef</string>
+
+    <!-- Kakao SDK에서 사용할 스킴 정의 -->
+    <string name="kakao_scheme">kakaod780444afe452ec61b1483e9ef8326ef</string>
 </resources>

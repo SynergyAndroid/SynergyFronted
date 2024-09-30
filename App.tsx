@@ -1,42 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { SafeAreaView, StyleSheet } from 'react-native';
-import { Provider } from 'react-redux';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import store from './src/store'; // Redux 스토어를 가져옵니다
+import { NavigationContainer } from '@react-navigation/native';
+import RootNavigator from './src/navigation/RootNavigator';
+import { QueryClientProvider} from '@tanstack/react-query';
+import queryClient from './src/api/queryClient';
 
-import OnboardingNavigator from './src/navigation/OnboardingNavigator';
-import AppNavigator from './src/navigation/AppNavigator';
 
 function App() {
-  const [isFirstLaunch, setIsFirstLaunch] = useState<boolean | null>(null);
-
-  useEffect(() => {
-    const checkFirstLaunch = async () => {
-      try {
-        const hasLaunched = await AsyncStorage.getItem('hasLaunched');
-        if (hasLaunched === null) {
-          setIsFirstLaunch(true);
-          await AsyncStorage.setItem('hasLaunched', 'true');
-        } else {
-          setIsFirstLaunch(false);
-        }
-      } catch (error) {
-        console.error('Failed to load launch status:', error);
-      }
-    };
-    checkFirstLaunch();
-  }, []);
-
-  if (isFirstLaunch === null) {
-    return null; // 로딩 스크린 또는 null 반환
-  }
-
   return (
-    <Provider store={store}> 
-      <SafeAreaView style={styles.container}>
-        {isFirstLaunch ? <OnboardingNavigator /> : <AppNavigator />}
-      </SafeAreaView>
-    </Provider>
+    <QueryClientProvider client={queryClient}>
+    
+      <NavigationContainer>
+        <SafeAreaView style={styles.container}>
+          <RootNavigator />
+        </SafeAreaView>
+      </NavigationContainer>
+    </QueryClientProvider>
+    
   );
 }
 

@@ -6,4 +6,9 @@
         <item name="android:editTextBackground">@drawable/rn_edit_text_material</item>
     </style>
 
+    <!-- AuthCodeHandlerActivity 테마 정의 -->
+    <style name="AuthCodeHandlerTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- 필요에 따라 추가 스타일 속성을 정의할 수 있습니다 -->
+    </style>
+
 </resources>

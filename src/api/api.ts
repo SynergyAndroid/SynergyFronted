@@ -1,6 +1,8 @@
-import axios from 'axios';
+// api 관련 페이지
 
-//const BASE_URL = 'http://localhost:8080/';
+import axios from 'axios';
+//const apiBaseUrl = "http://localhost:8080";
+
 /*
 interface UserData {
   username: string;
@@ -45,6 +47,7 @@ export const api = {
 };
 */
 
+/*
 
 async function postData() {
   try {
@@ -55,7 +58,9 @@ async function postData() {
   }
 }
 
+
 postData();
+*/
 
 //나중에 수정할 예정: delete data
 
