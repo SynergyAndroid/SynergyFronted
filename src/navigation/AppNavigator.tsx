@@ -3,7 +3,7 @@ import React from 'react';
 import Home from '../screens/Home';
 import NewPost from '../screens/Community/NewPost.tsx';
 import Community from '../screens/Community/Community.tsx';
-import Profile from '../screens/Profile';
+import Profile from '../screens/Profile/Profile.tsx';
 import Chat from '../screens/Chat';
 import ChatList from '../screens/ChatList';
 import PostDetail from '../screens/Community/PostDetail.tsx';

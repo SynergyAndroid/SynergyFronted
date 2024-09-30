@@ -8,7 +8,7 @@ import Home from '../screens/Home';
 import KakaoLogin from '../screens/SignUp/KakaoLogin';
 import HowToUse from '../screens/HowToUse';
 import Community from '../screens/Community/Community.tsx';
-import Profile from '../screens/Profile';
+import Profile from '../screens/Profile/Profile.tsx';
 import Chat from '../screens/Chat';
 import ChatList from '../screens/ChatList';
 import PostDetail from '../screens/Community/PostDetail.tsx';

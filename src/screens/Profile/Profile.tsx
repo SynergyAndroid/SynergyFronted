@@ -1,84 +1,32 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   Image,
-  Alert,
   Modal,
-  PermissionsAndroid,
-  Platform,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {usePhotoPicker} from './ProfilePhoto'; // 사진 선택 훅
+import {useAgePicker} from './ProfileAge'; // 생년월일 선택 훅
 
 const ProfileEdit = () => {
-  const [photo, setPhoto] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [username, setUsername] = useState('');
+  const {photo, selectPhotoFromGallery, takePhotoWithCamera} = usePhotoPicker();
+  const {BirthdatePicker} = useAgePicker(); // 생년월일 훅 사용
 
-  const requestCameraPermission = async () => {
-    if (Platform.OS === 'android') {
-      try {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.CAMERA,
-          {
-            title: '카메라 권한 요청',
-            message:
-              '이 앱은 프로필 사진 촬영을 위해 카메라 접근 권한이 필요합니다.',
-            buttonNeutral: '나중에 묻기',
-            buttonNegative: '거부',
-            buttonPositive: '허용',
-          },
-        );
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          console.log('카메라 권한이 허용되었습니다');
-          return true;
-        } else {
-          console.log('카메라 권한이 거부되었습니다');
-          return false;
-        }
-      } catch (err) {
-        console.warn(err);
-        return false;
+  useEffect(() => {
+    const fetchUsername = async () => {
+      const storedUsername = await AsyncStorage.getItem('username');
+      if (storedUsername) {
+        setUsername(storedUsername);
       }
-    } else {
-      return true;
-    }
-  };
-
-  const handleImageSelection = response => {
-    if (response.didCancel) {
-      console.log('사용자가 이미지 선택을 취소했습니다.');
-    } else if (response.errorCode) {
-      console.log('이미지 선택 에러:', response.errorMessage);
-    } else if (response.assets && response.assets.length > 0) {
-      setPhoto({uri: response.assets[0].uri});
-    }
-    setModalVisible(false);
-  };
-
-  const selectPhotoFromGallery = () => {
-    launchImageLibrary({mediaType: 'photo'}, handleImageSelection);
-  };
-
-  const takePhotoWithCamera = async () => {
-    const hasPermission = await requestCameraPermission();
-    if (hasPermission) {
-      launchCamera(
-        {
-          mediaType: 'photo',
-          saveToPhotos: true,
-        },
-        handleImageSelection,
-      );
-    } else {
-      Alert.alert(
-        '권한 오류',
-        '카메라를 사용하려면 권한이 필요합니다. 설정에서 권한을 허용해주세요.',
-      );
-    }
-  };
+    };
+    fetchUsername();
+  }, []);
 
   const openOptionsModal = () => setModalVisible(true);
 
@@ -146,14 +94,13 @@ const ProfileEdit = () => {
       <View style={styles.infoContainer}>
         <TouchableOpacity style={styles.infoRow}>
           <Text style={styles.infoLabel}>사용자 이름</Text>
-          <Text style={styles.infoText}>김순득</Text>
+          <Text style={styles.infoText}>{username}</Text>
           <Icon name="right" size={16} color="#ccc" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.infoRow}>
-          <Text style={styles.infoLabel}>나이</Text>
-          <Text style={styles.infoText}>48</Text>
-          <Icon name="right" size={16} color="#ccc" />
-        </TouchableOpacity>
+
+        {/* 생년월일 선택 부분 */}
+        <BirthdatePicker />
+
         <TouchableOpacity style={styles.infoRow}>
           <Text style={styles.infoLabel}>내 위치 수정하기</Text>
           <Icon name="right" size={16} color="#ccc" />
