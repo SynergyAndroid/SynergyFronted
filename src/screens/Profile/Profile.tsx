@@ -8,30 +8,51 @@ import {
   Modal,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
+import {useProfileAsyncStorage} from './ProfileAsyncStroage.tsx'; // 커스텀 훅 불러오기
+import {usePhotoPicker} from './ProfilePhoto.tsx'; // 사진 관리 훅 불러오기
+import DateTimePicker from '@react-native-community/datetimepicker'; // DateTimePicker 사용
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {usePhotoPicker} from './ProfilePhoto'; // 사진 선택 훅
-import {useAgePicker} from './ProfileAge'; // 생년월일 선택 훅
 
 const ProfileEdit = () => {
-  const [modalVisible, setModalVisible] = useState(false);
+  const {birthdate, saveBirthdate} = useProfileAsyncStorage(); // 생년월일 관리 훅
+  const {photo, selectPhotoFromGallery, takePhotoWithCamera} = usePhotoPicker(); // 사진 관리 훅
   const [username, setUsername] = useState('');
-  const {photo, selectPhotoFromGallery, takePhotoWithCamera} = usePhotoPicker();
-  const {BirthdatePicker} = useAgePicker(); // 생년월일 훅 사용
+  const [modalVisible, setModalVisible] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false); // DatePicker 표시 여부
 
   useEffect(() => {
     const fetchUsername = async () => {
-      const storedUsername = await AsyncStorage.getItem('username');
-      if (storedUsername) {
-        setUsername(storedUsername);
+      try {
+        const storedUsername = await AsyncStorage.getItem('username');
+        if (storedUsername) {
+          setUsername(storedUsername);
+        }
+      } catch (e) {
+        console.log('Error loading username', e);
       }
     };
     fetchUsername();
   }, []);
 
   const openOptionsModal = () => setModalVisible(true);
-
+  //사진선택후 처리: 선택한 사진 저장
+  const handlePhotoSelection = (uri: string) => {
+    savePhoto(uri); // 사진 저장
+    setModalVisible(false); // 모달 닫기
+  };
+  //생년월일선택후 처리: 선택날짜 저장
+  const handleBirthdateChange = (
+    event: any,
+    selectedDate: Date | undefined,
+  ) => {
+    setShowDatePicker(false); // DatePicker 닫기
+    if (selectedDate) {
+      saveBirthdate(selectedDate); // 선택한 날짜 저장
+    }
+  };
   return (
     <View style={styles.container}>
+      {/* 프로필 사진 변경 */}
       <View style={styles.profileContainer}>
         <View style={styles.profileImageWrapper}>
           {photo ? (
@@ -45,6 +66,7 @@ const ProfileEdit = () => {
         </TouchableOpacity>
       </View>
 
+      {/* 사진 선택 모달 */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -54,18 +76,8 @@ const ProfileEdit = () => {
           <View style={styles.modalView}>
             <TouchableOpacity
               style={styles.modalOption}
-              onPress={takePhotoWithCamera}>
-              <Icon
-                name="camerao"
-                size={24}
-                color="#333"
-                style={styles.modalIcon}
-              />
-              <Text style={styles.modalOptionText}>카메라로 촬영하기</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.modalOption}
               onPress={selectPhotoFromGallery}>
+              {/* 갤러리에서 사진 선택 */}
               <Icon
                 name="picture"
                 size={24}
@@ -73,6 +85,18 @@ const ProfileEdit = () => {
                 style={styles.modalIcon}
               />
               <Text style={styles.modalOptionText}>사진 선택하기</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.modalOption}
+              onPress={takePhotoWithCamera}>
+              {/* 카메라로 사진 촬영 */}
+              <Icon
+                name="camerao"
+                size={24}
+                color="#333"
+                style={styles.modalIcon}
+              />
+              <Text style={styles.modalOptionText}>카메라로 촬영하기</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.modalOption, styles.cancelOption]}
@@ -91,6 +115,7 @@ const ProfileEdit = () => {
         </View>
       </Modal>
 
+      {/* 사용자 이름 */}
       <View style={styles.infoContainer}>
         <TouchableOpacity style={styles.infoRow}>
           <Text style={styles.infoLabel}>사용자 이름</Text>
@@ -98,8 +123,30 @@ const ProfileEdit = () => {
           <Icon name="right" size={16} color="#ccc" />
         </TouchableOpacity>
 
-        {/* 생년월일 선택 부분 */}
-        <BirthdatePicker />
+        {/* 생년월일 */}
+        <TouchableOpacity
+          style={styles.infoRow}
+          onPress={() => setShowDatePicker(true)}>
+          {/* 생년월일 클릭 시 DatePicker 표시 */}
+          <Text style={styles.infoLabel}>생년월일</Text>
+          <Text style={styles.infoText}>
+            {`${birthdate.getFullYear()}년 ${
+              birthdate.getMonth() + 1
+            }월 ${birthdate.getDate()}일`}
+          </Text>
+          <Icon name="right" size={16} color="#ccc" />
+        </TouchableOpacity>
+
+        {/* DateTimePicker 표시 */}
+        {showDatePicker && (
+          <DateTimePicker
+            value={birthdate}
+            mode="date"
+            display="spinner"
+            onChange={handleBirthdateChange}
+            maximumDate={new Date()}
+          />
+        )}
 
         <TouchableOpacity style={styles.infoRow}>
           <Text style={styles.infoLabel}>내 위치 수정하기</Text>
@@ -176,14 +223,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 20,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
   },
   modalOption: {
     flexDirection: 'row',
@@ -197,9 +236,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginLeft: 10,
     color: '#333',
-  },
-  cancelOption: {
-    borderBottomWidth: 0,
   },
   cancelOptionText: {
     color: '#FF3B30',

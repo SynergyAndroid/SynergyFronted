@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // 생년월일과 프로필 사진을 관리하는 훅
 export const useProfileAsyncStorage = () => {
   const [birthdate, setBirthdate] = useState(new Date(1993, 0, 1)); // 기본값 설정
-  const [photo, setPhoto] = useState(null); // 프로필 사진 저장 상태
+  const [photo, setPhoto] = useState(null);
 
   // 생년월일과 사진 불러오기
   useEffect(() => {
