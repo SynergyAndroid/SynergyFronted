@@ -98,15 +98,6 @@ const Home = () => {
                 <Text style={styles.subGreetingText}>
                   우리 오늘은 어디로 떠나볼까요?
                 </Text>
-                <TouchableOpacity
-                  onPress={async () => {
-                    await AsyncStorage.removeItem('username'); // 로그아웃 처리
-                    setUsername(null); // 상태 업데이트
-                    navigation.navigate('Login'); // 로그인 화면으로 이동
-                  }}
-                  style={styles.logoutButton}>
-                  <Text>로그아웃</Text>
-                </TouchableOpacity>
               </View>
             </View>
 
