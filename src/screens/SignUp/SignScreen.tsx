@@ -1,66 +1,43 @@
-import {Alert} from 'react-native';
-import React from 'react';
-import {useRef} from 'react';
+import React, {useState} from 'react';
 import {
+  Alert,
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   SafeAreaView,
-  TextInput,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import InputField from '../../components/inputField';
 import useForm from '../../../hooks/useForm';
 import useAuth from '../../../hooks/queries/useAuth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import MayIUse from '../Location/MayIUse'; // 위치 정보 모달
+import saveUserLocation from '../Location/Location'; // 위치 정보 저장 로직
 
-// 회원가입 유효성 검사 함수
-function validateSignup(values: {
-  username: string;
-  email: string;
-  password: string;
-  passwordConfirm: string;
-}) {
-  const errors = {
-    username: '',
-    email: '',
-    password: '',
-    passwordConfirm: '',
-  };
-
-  // 이메일 형식 검증
+function validateSignup(values) {
+  const errors = {};
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
     errors.email = '올바른 이메일 형식이 아닙니다.';
   }
-
-  // 비밀번호 길이 검증
-  if (!(values.password.length >= 8 && values.password.length < 20)) {
+  if (values.password.length < 8 || values.password.length > 20) {
     errors.password = '비밀번호는 8에서 20자리로 입력해주세요';
   }
-
-  // 비밀번호 확인
   if (values.password !== values.passwordConfirm) {
     errors.passwordConfirm = '비밀번호가 일치하지 않습니다.';
   }
-
   return errors;
 }
 
 function SignScreen() {
-  useRef<TextInput | null>(null);
-  useRef<TextInput | null>(null);
-
-  const {signupMutation, loginMutation} = useAuth(); // 로그인 mutation 추가
   const navigation = useNavigation();
-
-  // useForm 훅을 통해 입력 값과 유효성 검증 로직을 연결
+  const {signupMutation} = useAuth();
   const SignUp = useForm({
     initialValue: {username: '', email: '', password: '', passwordConfirm: ''},
     validate: validateSignup,
   });
+  const [showLocationModal, setShowLocationModal] = useState(false);
 
-  // 모든 필드가 채워지고, 에러가 없는지 확인하는 함수
   const isFormValid = () => {
     const {values, errors} = SignUp;
     return (
@@ -75,37 +52,25 @@ function SignScreen() {
     );
   };
 
-  // 회원가입 완료 버튼 핸들러
-  const handleSignUp = async () => {
-    try {
+  const handleSignUp = () => {
+    if (isFormValid()) {
       signupMutation.mutate(SignUp.values, {
         onSuccess: () => {
-          // 로그인 mutation 호출
-          loginMutation.mutate(SignUp.values, {
-            onSuccess: async () => {
-              Alert.alert('회원가입 성공!', '홈 화면으로 이동합니다.');
-              console.log('회원가입 완료', SignUp.values);
-              await AsyncStorage.setItem('username', SignUp.values.username);
-              navigation.navigate('Home');
-            },
-            onError: error => {
-              console.error('로그인 중 오류:', error);
-              Alert.alert('로그인 실패', '로그인 중 문제가 발생했습니다.');
-            },
-          });
+          setShowLocationModal(true); // 위치 정보 요청 모달 표시
         },
         onError: error => {
-          console.error('회원가입 중 오류:', error);
-          Alert.alert('회원가입 실패', '회원가입 중 문제가 발생했습니다.');
+          const errorMessage =
+            error.response?.data?.message || '회원가입 중 문제가 발생했습니다.';
+          Alert.alert('회원가입 실패', errorMessage);
         },
       });
-    } catch (error) {
-      console.error('회원가입 시 캐치된 오류:', error);
-      Alert.alert(
-        '회원가입 실패',
-        '회원가입 중 예상치 못한 오류가 발생했습니다.',
-      );
     }
+  };
+
+  const handleLocationAccept = (latitude, longitude) => {
+    saveUserLocation(SignUp.values.username, latitude, longitude);
+    setShowLocationModal(false); // 모달 닫기 후
+    Alert.alert('회원가입 성공!', '홈 화면으로 이동합니다.'); // 회원가입 완료 알림 표시
   };
 
   return (
@@ -113,41 +78,36 @@ function SignScreen() {
       <View style={styles.inputContainer}>
         <Text>사용자명</Text>
         <InputField
-          placeholder="사용자명을 입력하세요"
-          error={SignUp.errors.username}
-          touched={SignUp.touched.username}
+          label="사용자명"
           {...SignUp.getTextInputProps('username')}
         />
         <Text>이메일</Text>
         <InputField
-          placeholder="이메일을 입력하세요"
-          error={SignUp.errors.email}
-          touched={SignUp.touched.email}
+          label="이메일"
           inputMode="email"
           {...SignUp.getTextInputProps('email')}
         />
         <Text>비밀번호</Text>
         <InputField
-          placeholder="비밀번호"
-          error={SignUp.errors.password}
+          label="비밀번호"
           secureTextEntry
-          touched={SignUp.touched.password}
           {...SignUp.getTextInputProps('password')}
         />
         <Text>비밀번호 확인</Text>
         <InputField
-          placeholder="비밀번호 확인"
-          error={SignUp.errors.passwordConfirm}
+          label="비밀번호 확인"
           secureTextEntry
-          touched={SignUp.touched.passwordConfirm}
           {...SignUp.getTextInputProps('passwordConfirm')}
         />
       </View>
+      {showLocationModal && (
+        <MayIUse onLocationReceived={handleLocationAccept} />
+      )}
       <TouchableOpacity
         style={[styles.buttonStyle, !isFormValid() && styles.buttonDisabled]}
         onPress={handleSignUp}
         disabled={!isFormValid()}>
-        <Text style={styles.buttonText}>회원가입 완료!</Text>
+        <Text style={styles.buttonText}>회원가입 완료</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -156,6 +116,7 @@ function SignScreen() {
 const styles = StyleSheet.create({
   inputContainer: {
     gap: 20,
+    marginVertical: 20,
   },
   container: {
     flex: 1,
@@ -163,15 +124,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   buttonDisabled: {
-    backgroundColor: '#cccccc', // 버튼 비활성화 시 회색
+    backgroundColor: '#cccccc',
   },
   buttonStyle: {
-    position: 'absolute',
-    bottom: 20,
-    left: 20,
-    right: 20,
+    marginTop: 20,
     backgroundColor: '#005F40',
-    paddingVertical: 15,
+    padding: 15,
     alignItems: 'center',
     borderRadius: 5,
   },
