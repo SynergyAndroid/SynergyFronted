@@ -13,7 +13,6 @@ import useForm from '../../../hooks/useForm';
 import useAuth from '../../../hooks/queries/useAuth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MayIUse from '../Location/MayIUse'; // 위치 정보 모달
-import saveUserLocation from '../Location/Location'; // 위치 정보 저장 로직
 
 function validateSignup(values) {
   const errors = {};
@@ -36,7 +35,6 @@ function SignScreen() {
     initialValue: {username: '', email: '', password: '', passwordConfirm: ''},
     validate: validateSignup,
   });
-  const [showLocationModal, setShowLocationModal] = useState(false);
 
   const isFormValid = () => {
     const {values, errors} = SignUp;
@@ -51,7 +49,8 @@ function SignScreen() {
       !errors.passwordConfirm
     );
   };
-
+  const handleLocationAccept;
+  /*
   const handleSignUp = () => {
     if (isFormValid()) {
       signupMutation.mutate(SignUp.values, {
@@ -67,11 +66,7 @@ function SignScreen() {
     }
   };
 
-  const handleLocationAccept = (latitude, longitude) => {
-    saveUserLocation(SignUp.values.username, latitude, longitude);
-    setShowLocationModal(false); // 모달 닫기 후
-    Alert.alert('회원가입 성공!', '홈 화면으로 이동합니다.'); // 회원가입 완료 알림 표시
-  };
+ */
 
   return (
     <SafeAreaView style={styles.container}>
@@ -100,9 +95,7 @@ function SignScreen() {
           {...SignUp.getTextInputProps('passwordConfirm')}
         />
       </View>
-      {showLocationModal && (
-        <MayIUse onLocationReceived={handleLocationAccept} />
-      )}
+      <MayIUse onLocationReceived={handleLocationAccept} />
       <TouchableOpacity
         style={[styles.buttonStyle, !isFormValid() && styles.buttonDisabled]}
         onPress={handleSignUp}
